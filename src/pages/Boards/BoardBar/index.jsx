@@ -12,13 +12,13 @@ import Button from '@mui/material/Button'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
 
 const MERN_STYLES = {
-  color: 'primary.main',
-  bgcolor: 'white',
+  color: 'white',
+  bgcolor: 'transparent',
   border: 'none',
   paddingX: '5px',
   borderRadius: '4px',
   '& .MuiSvgIcon-root': {
-    color: 'primary.main'
+    color: 'white'
   },
   '&:hover': {
     bgcolor: 'primary.50'
@@ -37,7 +37,8 @@ const BoardBar = () => {
         gap: 2,
         paddingX: 2,
         overflowX: 'auto',
-        borderTop: '1px solid #00bfa5'
+        borderBottom: '1px solid #00bfa5',
+        bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2')
       }}
     >
       <Box
@@ -89,15 +90,27 @@ const BoardBar = () => {
           gap: 2
         }}
       >
-        <Button variant='outlined' startIcon={<PersonAddIcon />}>Invite</Button>
+        <Button
+          variant='outlined'
+          startIcon={<PersonAddIcon />}
+          sx={{
+            color: 'white',
+            borderColor: 'white',
+            '&:hover': { borderColor: 'white' }
+          }}
+        >
+            Invite
+        </Button>
         <AvatarGroup
           max={4}
           sx={{
             '& .MuiAvatar-root': {
               width: 34,
               height: 34,
-              fontSize: 16
-            }
+              fontSize: 16,
+              border: 'none'
+            },
+            gap: '10px'
           }}
         >
           <Tooltip title='Dinh Cuong'>
