@@ -10,7 +10,8 @@ import {
   MouseSensor,
   TouchSensor,
   DragOverlay,
-  defaultDropAnimationSideEffects
+  defaultDropAnimationSideEffects,
+  closestCorners
 } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import Column from './ListColumns/Column/Column'
@@ -138,7 +139,9 @@ const BoardContent = ({ board }) => {
       onDragStart={handleDragStar}
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
-      sensors={sensors}>
+      sensors={sensors}
+      collisionDetection={closestCorners}
+    >
       <Box
         sx={{
           bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#344953' : '#1976d2'),
