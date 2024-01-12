@@ -174,6 +174,7 @@ const Column = ({ column }) => {
                 type='text'
                 size='small'
                 autoFocus
+                data-no-dnd="true"
                 variant='outlined'
                 value={newCardTitle}
                 onChange={(e) => setNewCardTitle(e.target.value)}
@@ -192,7 +193,7 @@ const Column = ({ column }) => {
                   '& .MuiOutlinedInput-input': { borderRadius: 1 }
                 }}
               />
-              <Box onClick={addNewCard} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Box data-no-dnd="true" onClick={addNewCard} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Button
                   variant='contained' color='success' size='small'
                   sx={{

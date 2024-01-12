@@ -74,6 +74,7 @@ const ListColumns = ({ columns }) => {
               size='small'
               autoFocus
               variant='outlined'
+              data-no-dnd='true'
               value={newColumnTitle}
               onChange={(e) => setNewColumnTitle(e.target.value)}
               sx={{
