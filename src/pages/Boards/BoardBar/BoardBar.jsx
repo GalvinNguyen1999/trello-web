@@ -48,12 +48,14 @@ const BoardBar = ({ board }) => {
           gap: 2
         }}
       >
-        <Chip
-          icon={<DashboardIcon />}
-          label={board?.title}
-          sx={MERN_STYLES}
-          clickable
-        />
+        <Tooltip title={board?.description}>
+          <Chip
+            icon={<DashboardIcon />}
+            label={board?.title}
+            sx={MERN_STYLES}
+            clickable
+          />
+        </Tooltip>
 
         <Chip
           icon={<VpnLockIcon />}
