@@ -16,6 +16,8 @@ import Tooltip from '@mui/material/Tooltip'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import AddCardIcon from '@mui/icons-material/AddCard'
 import DragHandleIcon from '@mui/icons-material/DragHandle'
+import TextField from '@mui/material/TextField'
+import CloseIcon from '@mui/icons-material/Close'
 import ListCard from './ListCards/ListCard'
 import { mapOrder } from '~/utils/sorts'
 import { useSortable } from '@dnd-kit/sortable'
@@ -44,6 +46,17 @@ const Column = ({ column }) => {
   }
 
   const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
+
+  const [openNewCardForm, setOpenNewCardForm] = useState(false)
+  const toggleOpenNewCardForm = () => setOpenNewCardForm(!openNewCardForm)
+
+  const [newCardTitle, setNewCardTitle] = useState('')
+
+  const addNewCard = () => {
+    if (!newCardTitle) return
+    toggleOpenNewCardForm()
+    setNewCardTitle('')
+  }
 
   return (
     <div ref={setNodeRef} style={dndKitColumnStyles} {...attributes}>
@@ -137,15 +150,71 @@ const Column = ({ column }) => {
         {/* Box column footer */}
         <Box sx={{
           height: (theme) => theme.trelloCustom.columnFooterHeight,
-          p: 2,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between'
+          p: 2
         }}>
-          <Button startIcon={<AddCardIcon />}>Add new card</Button>
-          <Tooltip title='Drag to move'>
-            <DragHandleIcon sx={{ cursor: 'pointer' }} />
-          </Tooltip>
+          {!openNewCardForm
+            ? <Box sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}>
+              <Button startIcon={<AddCardIcon />} onClick={toggleOpenNewCardForm}>Add new card</Button>
+              <Tooltip title='Drag to move'>
+                <DragHandleIcon sx={{ cursor: 'pointer' }} />
+              </Tooltip>
+            </Box>
+            : <Box sx={{
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1
+            }}>
+              <TextField
+                label='Enter card title...'
+                type='text'
+                size='small'
+                autoFocus
+                variant='outlined'
+                value={newCardTitle}
+                onChange={(e) => setNewCardTitle(e.target.value)}
+                sx={{
+                  '& label': { color: 'text.primary' },
+                  '& input': {
+                    color: (theme) => theme.palette.text.primary,
+                    bgcolor: (theme) => theme.palette.mode === 'dark' ? '#333643' : 'white'
+                  },
+                  '& label.Mui-focused': { color: (theme) => theme.palette.text.primary },
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': { borderColor: (theme) => theme.palette.text.primary },
+                    '&:hover fieldset': { borderColor: (theme) => theme.palette.text.primary },
+                    '&.Mui-focused fieldset': { borderColor: (theme) => theme.palette.text.primary }
+                  },
+                  '& .MuiOutlinedInput-input': { borderRadius: 1 }
+                }}
+              />
+              <Box onClick={addNewCard} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Button
+                  variant='contained' color='success' size='small'
+                  sx={{
+                    boxShadow: 'none',
+                    border: '0.5px solid',
+                    borderColor: (theme) => theme.palette.success.main,
+                    '&:hover': { bgcolor: (theme) => theme.palette.success.main }
+                  }}
+                >
+                  Add
+                </Button>
+                <CloseIcon
+                  fontSize='small'
+                  onClick={toggleOpenNewCardForm}
+                  sx={{
+                    color: (theme) => theme.palette.warning.light,
+                    cursor: 'pointer'
+                  }}
+                />
+              </Box>
+            </Box>
+          }
         </Box>
       </Box>
     </div>

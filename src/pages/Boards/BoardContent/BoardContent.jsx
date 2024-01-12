@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
 import Box from '@mui/material/Box'
-import ListColums from './ListColumns/ListColums'
+import ListColumns from './ListColumns/ListColumns'
 import { mapOrder } from '~/utils/sorts'
 import {
   DndContext,
@@ -251,7 +251,7 @@ const BoardContent = ({ board }) => {
           p: '10px 0'
         }}
       >
-        <ListColums columns={orderedColumns} />
+        <ListColumns columns={orderedColumns} />
         <DragOverlay dropAnimation={CustomDropAnimation}>
           {!activeDragItemType && null}
           {(activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) && <Column column={activeDragItemData} />}

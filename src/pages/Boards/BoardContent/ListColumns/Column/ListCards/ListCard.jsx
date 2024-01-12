@@ -19,7 +19,7 @@ const ListCard = ({ cards }) => {
     )`,
         '&::-webkit-scrollbar-thumb': { backgroundColor: '#ced0da' },
         '&::-webkit-scrollbar-thumb:hover': { backgroundColor: '#bfc2cf' },
-        p: '0 5px',
+        p: '0 5px 5px 5px',
         m: '0 5px'
       }}>
         {cards?.map(card => <Card key={card._id} card={card} />)}
