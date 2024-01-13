@@ -24,7 +24,7 @@ const Card = ({ card }) => {
   }
 
   const shouldShowCardActions = () => {
-    return !!card?.memberIds.length || !!card?.comments.length || !!card?.attachments.length
+    return !!card?.memberIds?.length || !!card?.comments?.length || !!card?.attachments?.length
   }
 
   return (
