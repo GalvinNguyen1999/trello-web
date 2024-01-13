@@ -28,7 +28,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-const BoardContent = ({ board, createNewColumn, createNewCard }) => {
+const BoardContent = ({ board, createNewColumn, createNewCard, moveColumn }) => {
   // const pointersensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
   const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
   const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 500 } })
@@ -199,9 +199,8 @@ const BoardContent = ({ board, createNewColumn, createNewCard }) => {
         const newColumnIndex = orderedColumns.findIndex(c => c._id === over.id)
 
         const dndOrderedColumns = arrayMove(orderedColumns, oldColumnIndex, newColumnIndex)
-        // const dndOrderedColumnsIds = orderedColumns.map(c => c._id)
-        // console.log('dndOrderedColumns: ', dndOrderedColumns)
-        // console.log('dndOrderedColumnsIds: ', dndOrderedColumnsIds)
+
+        moveColumn(dndOrderedColumns)
 
         setOrderedColumns(dndOrderedColumns)
       }
