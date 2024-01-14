@@ -18,6 +18,11 @@ export const createNewColumnAPI = async (newColumnData) => {
   return response.data
 }
 
+export const updateColumnDetailsAPI = async (columnId, columnData) => {
+  const response = await axios.put(`${API_ROOT}/v1/columns/${columnId}`, columnData)
+  return response.data
+}
+
 /* APIs Columns */
 export const createNewCardAPI = async (newCardData) => {
   const response = await axios.post(`${API_ROOT}/v1/cards`, newCardData)
