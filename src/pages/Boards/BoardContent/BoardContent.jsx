@@ -27,7 +27,14 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-const BoardContent = ({ board, createNewColumn, createNewCard, moveColumn, moveCard }) => {
+const BoardContent = ({
+  board,
+  createNewColumn,
+  createNewCard,
+  moveColumn,
+  moveCard,
+  moveCardToDifferentColumn
+}) => {
   // const pointersensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
   const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
   const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 500 } })
@@ -61,7 +68,8 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumn, moveC
     over,
     activeColumn,
     activeDraggingCardId,
-    activeDraggingCardData
+    activeDraggingCardData,
+    triggerFrom
   ) => {
     setOrderedColumns(prevColumns => {
       const overCardIndex = overColumn?.cards?.findIndex(card => card._id === overCartId)
@@ -103,6 +111,16 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumn, moveC
 
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map(card => card._id)
       }
+
+      if (triggerFrom === 'handleDragEnd') {
+        moveCardToDifferentColumn(
+          activeDraggingCardId,
+          oldColumnWhenDraggingCard._id,
+          nextOverColumn._id,
+          nextColumns
+        )
+      }
+
       return nextColumns
     })
   }
@@ -168,7 +186,8 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumn, moveC
           over,
           activeColumn,
           activeDraggingCardId,
-          activeDraggingCardData
+          activeDraggingCardData,
+          'handleDragEnd'
         )
       } else {
         // lấy vị trí id cũ
