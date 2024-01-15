@@ -8,7 +8,7 @@ import NoteAddIcon from '@mui/icons-material/NoteAdd'
 import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
 import { toast } from 'react-toastify'
 
-const ListColumns = ({ columns, createNewColumn, createNewCard }) => {
+const ListColumns = ({ columns, createNewColumn, createNewCard, deleteColumn }) => {
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
   const toggleOpenNewColumnForm = () => setOpenNewColumnForm(!openNewColumnForm)
 
@@ -40,7 +40,13 @@ const ListColumns = ({ columns, createNewColumn, createNewCard }) => {
         overflowY: 'hidden',
         '&::-webkit-scrollbar-track': { m: 2 }
       }}>
-        {columns?.map(column => <Column createNewCard={createNewCard} key={column._id} column={column} />)}
+        {columns?.map(column => <Column
+          createNewCard={createNewCard}
+          key={column._id}
+          column={column}
+          deleteColumn={deleteColumn}
+        />)}
+
         {!openNewColumnForm
           ? <Box
             onClick={toggleOpenNewColumnForm}
