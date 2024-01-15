@@ -16,7 +16,8 @@ import {
   createNewColumnAPI,
   createNewCardAPI,
   updateBoardDetailsAPI,
-  updateColumnDetailsAPI
+  updateColumnDetailsAPI,
+  moveCardToDifferentColumnAPI
 } from '~/apis/index'
 
 const Board = () => {
@@ -95,6 +96,23 @@ const Board = () => {
     updateColumnDetailsAPI(columnId, { cardOrderIds: dndOrderedCardIds })
   }
 
+  const moveCardToDifferentColumn = (currentCardId, prevColumnId, nextColumnId, dndOrderedColumns) => {
+    const dndOrderedColumnsIds = dndOrderedColumns.map(c => c._id)
+
+    const newBoard = { ...board }
+    newBoard.columns = dndOrderedColumns
+    newBoard.columnOrderIds = dndOrderedColumnsIds
+    setBoard(newBoard)
+
+    moveCardToDifferentColumnAPI({
+      currentCardId,
+      prevColumnId,
+      prevCardOrderIds: dndOrderedColumns.find(column => column._id === prevColumnId)?.cardOrderIds,
+      nextColumnId,
+      nextCardOrderIds: dndOrderedColumns.find(column => column._id === nextColumnId)?.cardOrderIds
+    })
+  }
+
   if (!board) {
     return (
       <Box sx={{
@@ -102,7 +120,7 @@ const Board = () => {
         alignItems: 'center',
         justifyContent: 'center',
         gap: 1,
-        width: '100vh',
+        width: '100vw',
         height: '100vh'
       }}>
         <CircularProgress />
@@ -121,6 +139,7 @@ const Board = () => {
         createNewCard={createNewCard}
         moveColumn={moveColumn}
         moveCard={moveCard}
+        moveCardToDifferentColumn={moveCardToDifferentColumn}
       />
     </Container>
   )
