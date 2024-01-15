@@ -9,6 +9,7 @@ import { mapOrder } from '~/utils/sorts'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@mui/material/Typography'
+import { toast } from 'react-toastify'
 
 // import { mockData } from '~/apis/mock-data'
 import {
@@ -17,8 +18,10 @@ import {
   createNewCardAPI,
   updateBoardDetailsAPI,
   updateColumnDetailsAPI,
-  moveCardToDifferentColumnAPI
+  moveCardToDifferentColumnAPI,
+  deleteColumnDetailsAPI
 } from '~/apis/index'
+
 
 const Board = () => {
   const [board, setBoard] = useState(null)
@@ -125,6 +128,15 @@ const Board = () => {
     })
   }
 
+  const deleteColumn = (columnId) => {
+    const newBoard = { ...board }
+    newBoard.columns = newBoard.columns.filter(column => column._id !== columnId)
+    newBoard.columnOrderIds = newBoard.columnOrderIds.filter(_id => _id !== columnId)
+    setBoard(newBoard)
+
+    deleteColumnDetailsAPI(columnId).then((result) => toast.success(result.deleteResult))
+  }
+
   if (!board) {
     return (
       <Box sx={{
@@ -152,6 +164,7 @@ const Board = () => {
         moveColumn={moveColumn}
         moveCard={moveCard}
         moveCardToDifferentColumn={moveCardToDifferentColumn}
+        deleteColumn={deleteColumn}
       />
     </Container>
   )
