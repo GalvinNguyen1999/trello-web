@@ -1,4 +1,3 @@
-import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from '~/App.jsx'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -9,8 +8,12 @@ import { ToastContainer } from 'react-toastify'
 import { ConfirmProvider } from 'material-ui-confirm'
 import 'react-toastify/dist/ReactToastify.css'
 
+// Cấu hình Redux
+import { Provider } from 'react-redux'
+import { store } from './redux/strore'
+
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  <Provider store={store}>
     <CssVarsProvider theme={theme}>
       <ConfirmProvider defaultOptions={{
         allowClose: true,
@@ -24,5 +27,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <ToastContainer theme='colored' position='bottom-left' />
       </ConfirmProvider>
     </CssVarsProvider>
-  </React.StrictMode>
+  </Provider>
 )
