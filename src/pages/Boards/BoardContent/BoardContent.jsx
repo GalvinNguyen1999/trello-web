@@ -3,11 +3,8 @@ import Box from '@mui/material/Box'
 import ListColumns from './ListColumns/ListColumns'
 import {
   DndContext,
-  // PointerSensor,
   useSensor,
   useSensors,
-  // MouseSensor,
-  // TouchSensor,
   DragOverlay,
   defaultDropAnimationSideEffects,
   closestCorners,
@@ -15,7 +12,7 @@ import {
   getFirstCollision,
   closestCenter
 } from '@dnd-kit/core'
-import { MouseSensor, TouchSensor} from '~/customLibs/DndkitSensor'
+import { MouseSensor, TouchSensor } from '~/customLibs/DndkitSensor'
 import { arrayMove } from '@dnd-kit/sortable'
 import Column from './ListColumns/Column/Column'
 import Card from './ListColumns/Column/ListCards/Card/Card'
@@ -29,12 +26,9 @@ const ACTIVE_DRAG_ITEM_TYPE = {
 
 const BoardContent = ({
   board,
-  createNewColumn,
-  createNewCard,
   moveColumn,
   moveCard,
-  moveCardToDifferentColumn,
-  deleteColumn
+  moveCardToDifferentColumn
 }) => {
   // const pointersensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
   const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
@@ -269,7 +263,6 @@ const BoardContent = ({
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
       sensors={sensors}
-      // collisionDetection={closestCorners}
       collisionDetection={collisionDetectionStrategy}
     >
       <Box
@@ -282,9 +275,6 @@ const BoardContent = ({
       >
         <ListColumns
           columns={orderedColumns}
-          createNewColumn={createNewColumn}
-          createNewCard={createNewCard}
-          deleteColumn={deleteColumn}
         />
         <DragOverlay dropAnimation={CustomDropAnimation}>
           {!activeDragItemType && null}

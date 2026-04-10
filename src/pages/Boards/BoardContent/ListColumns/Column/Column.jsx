@@ -23,8 +23,15 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { toast } from 'react-toastify'
 import { useConfirm } from 'material-ui-confirm'
+import { createNewCardAPI, deleteColumnDetailsAPI } from '~/apis'
+import { cloneDeep } from 'lodash'
+import { updateCurrentActiveBoard, selectCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
+import { useSelector, useDispatch } from 'react-redux'
 
-const Column = ({ column, createNewCard, deleteColumn }) => {
+const Column = ({ column }) => {
+  const dispatch = useDispatch()
+  const board = useSelector(selectCurrentActiveBoard)
+
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column._id,
     data: { ...column }
@@ -53,7 +60,7 @@ const Column = ({ column, createNewCard, deleteColumn }) => {
 
   const [newCardTitle, setNewCardTitle] = useState('')
 
-  const addNewCard = () => {
+  const addNewCard = async () => {
     if (!newCardTitle) {
       toast.error('Please enter card title', { position: 'bottom-right' })
       return
@@ -64,7 +71,26 @@ const Column = ({ column, createNewCard, deleteColumn }) => {
       columnId: column._id
     }
 
-    createNewCard(cardData)
+    const newCard = await createNewCardAPI({
+      ...cardData,
+      boardId: board._id
+    })
+
+    const newBoard = cloneDeep(board)
+    const updateColumn = newBoard.columns.find(column => column._id === newCard.columnId)
+
+    if (updateColumn) {
+      if (updateColumn.cards.some(card => card.FE_placeholder_card)) {
+        updateColumn.cards = [newCard]
+        updateColumn.cardOrderIds = [newCard._id]
+      } else {
+        updateColumn.cards.push(newCard)
+        updateColumn.cardOrderIds.push(newCard._id)
+      }
+    }
+
+    dispatch(updateCurrentActiveBoard(newBoard))
+
     toggleOpenNewCardForm()
     setNewCardTitle('')
   }
@@ -86,7 +112,11 @@ const Column = ({ column, createNewCard, deleteColumn }) => {
       cancellationText: 'No'
     })
       .then(() => {
-        deleteColumn(column._id)
+        const newBoard = cloneDeep(board)
+        newBoard.columns = newBoard.columns.filter(c => c._id !== column._id)
+        newBoard.columnOrderIds = newBoard.columnOrderIds.filter(_id => _id !== column._id)
+        dispatch(updateCurrentActiveBoard(newBoard))
+        deleteColumnDetailsAPI(column._id).then((result) => toast.success(result.deleteResult))
       })
       .catch(() => {})
   }
