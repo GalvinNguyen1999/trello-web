@@ -11,7 +11,7 @@ import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@mui/material/Typography'
 import { cloneDeep } from 'lodash'
-
+import { useParams } from 'react-router-dom'
 import {
   updateBoardDetailsAPI,
   updateColumnDetailsAPI,
@@ -19,15 +19,15 @@ import {
 } from '~/apis/index'
 
 
-
 const Board = () => {
   const dispatch = useDispatch()
   const board = useSelector(selectCurrentActiveBoard)
+  const { boardId } = useParams()
 
   useEffect(() => {
-    const boardId = '65a215706b8948401c354667'
+    // const boardId = '65a215706b8948401c354667'
     dispatch(fetchBoardDetailsAPI(boardId))
-  }, [dispatch])
+  }, [dispatch, boardId])
 
   const moveColumn = (dndOrderedColumns) => {
     const dndOrderedColumnsIds = dndOrderedColumns.map(c => c._id)
