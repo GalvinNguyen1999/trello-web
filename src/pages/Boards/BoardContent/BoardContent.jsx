@@ -133,7 +133,6 @@ const BoardContent = ({
   const handleDragOver = (event) => {
     if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) return
 
-    // console.log('handleDragOver: ', event);
     const { active, over } = event
 
     if (!active || !over) return
@@ -160,7 +159,6 @@ const BoardContent = ({
   }
 
   const handleDragEnd = (event) => {
-    // console.log('handleDragEnd: ', event)
     const { active, over } = event
     if (!over) return
 

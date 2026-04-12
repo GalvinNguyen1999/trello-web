@@ -12,25 +12,31 @@ import 'react-toastify/dist/ReactToastify.css'
 import { Provider } from 'react-redux'
 import { store } from './redux/strore'
 
+import { PersistGate } from 'redux-persist/integration/react'
+import { persistStore } from 'redux-persist'
+const persistor = persistStore(store)
+
 // Cấu hình react-router-dom với browser router
 import { BrowserRouter } from 'react-router-dom'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter basename='/'>
     <Provider store={store}>
-      <CssVarsProvider theme={theme}>
-        <ConfirmProvider defaultOptions={{
-          allowClose: true,
-          buttonOrder: ['confirm', 'cancel'],
-          dialogProps: {
-            maxWidth: 'xs'
-          }
-        }}>
-          <CssBaseline />
-          <App />
-          <ToastContainer theme='colored' position='bottom-left' />
-        </ConfirmProvider>
-      </CssVarsProvider>
+      <PersistGate persistor={persistor}>
+        <CssVarsProvider theme={theme}>
+          <ConfirmProvider defaultOptions={{
+            allowClose: true,
+            buttonOrder: ['confirm', 'cancel'],
+            dialogProps: {
+              maxWidth: 'xs'
+            }
+          }}>
+            <CssBaseline />
+            <App />
+            <ToastContainer theme='colored' position='bottom-left' />
+          </ConfirmProvider>
+        </CssVarsProvider>
+      </PersistGate>
     </Provider>
   </BrowserRouter>
 )

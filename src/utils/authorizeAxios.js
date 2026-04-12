@@ -30,8 +30,6 @@ authorizedAxiosInstance.interceptors.response.use(
   (error) => {
     interceptorLoadingElements(false)
 
-    console.log(error)
-
     let errMessage = error.message
     if (error.response?.data?.message) {
       errMessage = error.response?.data?.message
