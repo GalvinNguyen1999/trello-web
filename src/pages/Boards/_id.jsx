@@ -7,9 +7,6 @@ import Container from '@mui/material/Container'
 import AppBar from '~/components/AppBar/AppBar'
 import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
-import Box from '@mui/material/Box'
-import CircularProgress from '@mui/material/CircularProgress'
-import Typography from '@mui/material/Typography'
 import { cloneDeep } from 'lodash'
 import { useParams } from 'react-router-dom'
 import {
@@ -17,6 +14,7 @@ import {
   updateColumnDetailsAPI,
   moveCardToDifferentColumnAPI
 } from '~/apis/index'
+import PageLoadingSpinner from '~/components/Loading/PageLoadingSpinner'
 
 
 const Board = () => {
@@ -73,17 +71,7 @@ const Board = () => {
 
   if (!board) {
     return (
-      <Box sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 1,
-        width: '100vw',
-        height: '100vh'
-      }}>
-        <CircularProgress />
-        <Typography>Loading Board...</Typography>
-      </Box>
+      <PageLoadingSpinner caption='Loading Board...' />
     )
   }
 

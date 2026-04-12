@@ -1,5 +1,6 @@
 import { API_ROOT } from '~/utils/constants'
 import authorizedAxiosInstance from '~/utils/authorizeAxios'
+import { toast } from 'react-toastify'
 
 /* APIs Board */
 export const updateBoardDetailsAPI = async (boardId, boardData) => {
@@ -31,5 +32,26 @@ export const deleteColumnDetailsAPI = async (columnId) => {
 /* APIs Columns */
 export const createNewCardAPI = async (newCardData) => {
   const response = await authorizedAxiosInstance.post(`${API_ROOT}/v1/cards`, newCardData)
+  return response.data
+}
+
+/* APIs Users */
+export const registerUserAPI = async (data) => {
+  const response = await authorizedAxiosInstance.post(`${API_ROOT}/v1/users/register`, data)
+
+  toast.success('Register successfully! Check your email to verify your account.', {
+    theme: 'colored'
+  })
+
+  return response.data
+}
+
+export const verifyUserAPI = async (data) => {
+  const response = await authorizedAxiosInstance.put(`${API_ROOT}/v1/users/verify`, data)
+
+  toast.success('Verify successfully! You can login now.', {
+    theme: 'colored'
+  })
+
   return response.data
 }
