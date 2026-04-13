@@ -14,7 +14,7 @@ import Logout from '@mui/icons-material/Logout'
 import { useDispatch, useSelector } from 'react-redux'
 import { logoutUserAPI, selectCurrentUser } from '~/redux/user/userSlice'
 import { useConfirm } from 'material-ui-confirm'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 const Profiles = () => {
   const dispatch = useDispatch()
@@ -75,21 +75,22 @@ const Profiles = () => {
           'aria-labelledby': 'basic-button-profiles'
         }}
       >
-        <MenuItem
-          onClick={handleClose}
-          sx={{
-            '&:hover': {
-              color: 'success.light'
-            }
-          }}
-        >
-          <Avatar
-            sx={{ width: 28, height: 28, mr: 2 }}
-            src={currentUser?.avatar}
-            alt={currentUser?.username}
-          />
-          Profile
-        </MenuItem>
+        <Link to="/settings/account">
+          <MenuItem
+            sx={{
+              '&:hover': {
+                color: 'success.light'
+              }
+            }}
+          >
+            <Avatar
+              sx={{ width: 28, height: 28, mr: 2 }}
+              src={currentUser?.avatar}
+              alt={currentUser?.username}
+            />
+            Profile
+          </MenuItem>
+        </Link>
         <Divider />
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
