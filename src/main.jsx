@@ -12,9 +12,14 @@ import 'react-toastify/dist/ReactToastify.css'
 import { Provider } from 'react-redux'
 import { store } from './redux/strore'
 
+// Cau hinh Redux Persist
 import { PersistGate } from 'redux-persist/integration/react'
 import { persistStore } from 'redux-persist'
 const persistor = persistStore(store)
+
+// Ky thuat inject store: là kỹ thuật cho phép store có thể truy cập được từ các file khác ngoài component
+import { injectStore } from './utils/authorizeAxios'
+injectStore(store)
 
 // Cấu hình react-router-dom với browser router
 import { BrowserRouter } from 'react-router-dom'
