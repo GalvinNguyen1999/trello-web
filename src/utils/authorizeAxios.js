@@ -1,6 +1,11 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { interceptorLoadingElements } from './formatters'
+import { refreshTokenAPI } from '~/apis'
+import { logoutUserAPI } from '~/redux/user/userSlice'
+
+let axiosReduxStore
+export const injectStore = (mainStore) => { axiosReduxStore = mainStore }
 
 let authorizedAxiosInstance = axios.create()
 
@@ -21,6 +26,8 @@ authorizedAxiosInstance.interceptors.request.use(
   }
 )
 
+let refreshTokenPromise = null
+
 // Cấu hình interceptor cho response
 authorizedAxiosInstance.interceptors.response.use(
   (response) => {
@@ -29,15 +36,38 @@ authorizedAxiosInstance.interceptors.response.use(
   },
   (error) => {
     interceptorLoadingElements(false)
+    // neu satus la 401 thi logout
+    if (error.response?.status === 401) {
+      axiosReduxStore.dispatch(logoutUserAPI(false))
+    }
+
+    // Nếu mã GONE 410 thì mình sẽ handle việc refresh token
+    const originalRequest = error.config
+    if (error.response?.status === 410 && originalRequest) {
+      // Handle refresh token
+      if (!refreshTokenPromise) {
+        refreshTokenPromise = refreshTokenAPI()
+          .then((data) => {
+            return data?.accessToken
+          })
+          .catch((_error) => {
+            axiosReduxStore.dispatch(logoutUserAPI(false))
+            return Promise.reject(_error)
+          })
+          .finally(() => {
+            refreshTokenPromise = null
+          })
+      }
+
+      // eslint-disable-next-line no-unused-vars
+      return refreshTokenPromise.then((accessToken) => {
+        return authorizedAxiosInstance(originalRequest)
+      })
+    }
 
     let errMessage = error.message
     if (error.response?.data?.message) {
       errMessage = error.response?.data?.message
-    }
-
-    // Nếu mã GONE 410 thì mình sẽ handle việc refresh token
-    if (error.response?.status === 410) {
-      // TODO: Handle refresh token
     }
 
     // Những lỗi còn lại thì sẽ rơi vào đây
