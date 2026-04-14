@@ -46,7 +46,12 @@ const AppBar = () => {
           gap: 2
         }}
       >
-        <AppsIcon sx={{ color: 'white' }} />
+        <Link to='/boards'>
+          <Tooltip title="Boards List">
+            <AppsIcon sx={{ color: 'white', verticalAlign: 'middle' }} />
+          </Tooltip>
+        </Link>
+
         <Link to='/'>
           <Box
             sx={{
