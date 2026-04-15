@@ -19,7 +19,7 @@ function App() {
   return (
     <Routes>
       {/* Redirect root to the first board */}
-      <Route path='/' element={<Navigate to='/boards/65a215706b8948401c354667' replace={true} />} />
+      <Route path='/' element={<Navigate to='/boards' replace={true} />} />
 
       <Route element={<ProtectedRoute user={currentUser} />}>
         {/* Board details */}
