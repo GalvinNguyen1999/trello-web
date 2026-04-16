@@ -23,10 +23,11 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { toast } from 'react-toastify'
 import { useConfirm } from 'material-ui-confirm'
-import { createNewCardAPI, deleteColumnDetailsAPI } from '~/apis'
+import { createNewCardAPI, deleteColumnDetailsAPI, updateColumnDetailsAPI } from '~/apis'
 import { cloneDeep } from 'lodash'
 import { updateCurrentActiveBoard, selectCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
 import { useSelector, useDispatch } from 'react-redux'
+import ToggleFocusInput from '~/components/Form/ToggleFocusInput'
 
 const Column = ({ column }) => {
   const dispatch = useDispatch()
@@ -120,6 +121,18 @@ const Column = ({ column }) => {
       })
       .catch(() => {})
   }
+
+  const onUpdateColumnTitle = (newTitle) => {
+    updateColumnDetailsAPI(column._id, { title: newTitle }).then(() => {
+      const newBoard = cloneDeep(board)
+      const updateColumn = newBoard.columns.find(col => col._id === column._id)
+      if (updateColumn) {
+        updateColumn.title = newTitle
+      }
+      dispatch(updateCurrentActiveBoard(newBoard))
+    })
+  }
+
   return (
     <div ref={setNodeRef} style={dndKitColumnStyles} {...attributes}>
       <Box
@@ -143,9 +156,14 @@ const Column = ({ column }) => {
           alignItems: 'center',
           justifyContent: 'space-between'
         }}>
-          <Typography variant='h6' sx={{ fontSize: '1rem', fontWeight: 'bold', cursor: 'pointer' }}>
+          {/* <Typography variant='h6' sx={{ fontSize: '1rem', fontWeight: 'bold', cursor: 'pointer' }}>
             {column?.title}
-          </Typography>
+          </Typography> */}
+
+          <ToggleFocusInput
+            value={column?.title}
+            onChangedValue={onUpdateColumnTitle}
+          />
           <Box>
             <Tooltip title='More options'>
               <ExpandMoreIcon

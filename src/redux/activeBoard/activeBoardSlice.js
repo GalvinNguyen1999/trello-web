@@ -33,6 +33,8 @@ export const activeBoardSlice = createSlice({
     builder.addCase(fetchBoardDetailsAPI.fulfilled, (state, action) => {
       let board = action.payload
 
+      console.log('board details: ', board)
+
       board.columns = mapOrder(board?.columns, board?.columnOrderIds, '_id')
 
       board.columns.forEach(column => {
