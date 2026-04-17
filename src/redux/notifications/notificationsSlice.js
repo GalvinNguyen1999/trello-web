@@ -57,7 +57,9 @@ export const notificationsSlice = createSlice({
 
 // Actions
 export const {
-  updateCurrentNotifications
+  clearCurrentNotifications,
+  updateCurrentNotifications,
+  addNotification
 } = notificationsSlice.actions
 
 // Selector
