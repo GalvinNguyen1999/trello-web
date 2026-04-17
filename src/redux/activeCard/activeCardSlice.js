@@ -27,7 +27,7 @@ export const activeCardSlice = createSlice({
 export const {
   updateCurrentActiveCard,
   clearAndHideModalCurrentActiveCard,
-  showModalActiveCard,
+  showModalActiveCard
 } = activeCardSlice.actions
 
 // Selector
