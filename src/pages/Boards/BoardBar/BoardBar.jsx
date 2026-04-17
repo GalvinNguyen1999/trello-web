@@ -10,6 +10,7 @@ import Button from '@mui/material/Button'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import { capitalizeFirstLetter } from '~/utils/formatters'
 import BoardUserGroup from './BoardUserGroup'
+import InviteBoardUser from './InviteBoardUser'
 
 const MERN_STYLES = {
   color: 'white',
@@ -91,18 +92,7 @@ const BoardBar = ({ board }) => {
           gap: 2
         }}
       >
-        <Button
-          variant='outlined'
-          startIcon={<PersonAddIcon />}
-          sx={{
-            color: 'white',
-            borderColor: 'white',
-            '&:hover': { borderColor: 'white' }
-          }}
-        >
-            Invite
-        </Button>
-
+        <InviteBoardUser boardId={board?._id} />
         <BoardUserGroup boardUsers={board?.FE_allUsers}/>
       </Box>
     </Box>
