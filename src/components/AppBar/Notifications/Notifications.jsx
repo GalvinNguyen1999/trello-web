@@ -14,13 +14,16 @@ import GroupAddIcon from '@mui/icons-material/GroupAdd'
 import DoneIcon from '@mui/icons-material/Done'
 import NotInterestedIcon from '@mui/icons-material/NotInterested'
 import { useDispatch, useSelector } from 'react-redux'
+import { socketIoInstance } from '~/main'
+import { useNavigate } from 'react-router-dom'
 
 import {
   fetchInvitationsAPI,
   selectCurrentNotifications,
-  updateBoardInvitationAPI
+  updateBoardInvitationAPI,
+  addNotification
 } from '~/redux/notifications/notificationsSlice'
-
+import { selectCurrentUser } from '~/redux/user/userSlice'
 
 const BOARD_INVITATION_STATUS = {
   PENDING: 'PENDING',
@@ -30,37 +33,58 @@ const BOARD_INVITATION_STATUS = {
 
 function Notifications() {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const notifications = useSelector(selectCurrentNotifications) || []
+  const currentUser = useSelector(selectCurrentUser)
 
   const [anchorEl, setAnchorEl] = useState(null)
+  const [newNotification, setNewNotification] = useState(false) // Biến để check xem có thông báo mới hay không
+
   const open = Boolean(anchorEl)
 
   const handleClickNotificationIcon = (event) => {
+    setNewNotification(false)
     setAnchorEl(event.currentTarget)
   }
   const handleClose = () => {
+    setNewNotification(false)
     setAnchorEl(null)
   }
 
   const updateBoardInvitation = (status, invitationId) => {
     dispatch(updateBoardInvitationAPI({ invitationId, status }))
       .then((res) => {
-        console.log('res: ', res)
-        // dispatch(fetchInvitationsAPI())
+        setNewNotification(false)
+        if (res.payload.boardInvitation.status === BOARD_INVITATION_STATUS.ACCEPTED) {
+          navigate(`/boards/${res.payload.boardInvitation.boardId}`)
+        }
       })
   }
 
-  // Fetch notifications
   useEffect(() => {
     dispatch(fetchInvitationsAPI())
-  }, [dispatch])
+
+    const onReceiveNewNotification = (invitation) => {
+      if (invitation.inviteeId === currentUser._id) {
+        dispatch(addNotification(invitation))
+        setNewNotification(true)
+      }
+    }
+
+    // Socket.io
+    socketIoInstance.on('BE_USER_INVITED_TO_BOARD', onReceiveNewNotification)
+
+    return () => {
+      socketIoInstance.off('BE_USER_INVITED_TO_BOARD', onReceiveNewNotification)
+    }
+  }, [currentUser._id, dispatch])
 
   return (
     <Box>
       <Tooltip title="Notifications">
         <Badge
-          color={notifications.length > 0 ? 'warning' : 'default'}
-          variant="dot"
+          color={newNotification ? 'warning' : 'default'}
+          variant={newNotification ? 'dot' : 'none'}
           sx={{ cursor: 'pointer' }}
           id="basic-button-open-notification"
           aria-controls={open ? 'basic-notification-drop-down' : undefined}
@@ -69,8 +93,7 @@ function Notifications() {
           onClick={handleClickNotificationIcon}
         >
           <NotificationsNoneIcon sx={{
-            // color: 'white'
-            color: notifications.length > 0 ? 'yellow' : 'white'
+            color: newNotification ? 'yellow' : 'white'
           }} />
         </Badge>
       </Tooltip>
