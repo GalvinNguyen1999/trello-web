@@ -272,7 +272,7 @@ const BoardContent = ({
         }}
       >
         <ListColumns
-          columns={orderedColumns}
+          columns={orderedColumns || []}
         />
         <DragOverlay dropAnimation={CustomDropAnimation}>
           {!activeDragItemType && null}
