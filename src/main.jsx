@@ -25,11 +25,6 @@ injectStore(store)
 // Cấu hình react-router-dom với browser router
 import { BrowserRouter } from 'react-router-dom'
 
-// Cấu hình socket.io
-import { io } from 'socket.io-client'
-import { API_ROOT } from '~/utils/constants'
-export const socketIoInstance = io(API_ROOT)
-
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <PersistGate persistor={persistor}>
